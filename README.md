@@ -1,87 +1,158 @@
+# VGA Controller with RGB Color Generator
 
-# VGA Controller Project
+## Overview
 
-## 📖 Overview
+This project implements a VGA Controller with an RGB Color Generator in Verilog HDL. The design generates standard VGA synchronization signals for 640×480 @ 60 Hz resolution and displays selectable colors on a VGA monitor using switch inputs.
 
-This project implements a **VGA (Video Graphics Array) controller** that generates the correct synchronization signals and drives RGB outputs to display images on a VGA monitor. The design is based on the **640×480 @ 60 Hz VGA standard**, using a **25.175 MHz pixel clock**.
-
-The system demonstrates how to:
-
-* Generate horizontal (HSYNC) and vertical (VSYNC) sync signals.
-* Manage timing regions (visible area, front porch, sync pulse, back porch).
-* Output RGB signals during the active video region.
-* Verify functionality with a **test bench**.
+The project demonstrates VGA timing generation, synchronization control, active video region handling, and RGB signal generation, making it suitable for FPGA-based digital design applications.
 
 ---
 
-## 🖥️ VGA Signal Breakdown
+## Features
 
-### Signals
-
-* **RGB (Red, Green, Blue)** → Analog voltages control pixel colors.
-* **HSYNC** → Marks the beginning of a new line.
-* **VSYNC** → Marks the beginning of a new frame.
-
-### Timing (640×480 @ 60 Hz)
-
-* **Horizontal (per line)**:
-
-  * Visible area → 640 pixels
-  * Front porch → 16 pixels
-  * Sync pulse → 96 pixels
-  * Back porch → 48 pixels
-  * **Total = 800 pixels per line**
-
-* **Vertical (per frame)**:
-
-  * Visible area → 480 lines
-  * Front porch → 10 lines
-  * Sync pulse → 2 lines
-  * Back porch → 33 lines
-  * **Total = 525 lines per frame**
-
-* **Pixel Clock**: 25.175 MHz
+* VGA timing generation for 640×480 @ 60 Hz
+* Horizontal and vertical synchronization signal generation
+* RGB color output control
+* Active video region detection
+* Configurable color selection using switches
+* FPGA-ready implementation
+* Functional simulation and verification through testbench
 
 ---
 
-## ⚙️ Project Structure
+## Project Structure
 
-* **`vga_ctrl` (VGA Controller)**
-
-  * Generates HSYNC and VSYNC signals.
-  * Maintains horizontal & vertical counters.
-  * Indicates active video region (`video_on`).
-
-* **`rgb_block` (RGB Generator)**
-
-  * Determines pixel colors based on inputs (e.g., `SW[2:0]`).
-  * Ensures output only during active video region.
-  * Displays black background outside active area.
-
-* **`Top_Module` (Top Module)**
-
-  * Connects all components.
-  * Outputs: `hsync`, `vsync`, `red`, `green`, `blue`.
-  * Can be tested on hardware (switches change screen color in real-time).
-
-* **Test Bench**
-
-  * Verifies RGB outputs during blanking intervals.
-  * Checks sync pulse widths, front porch, and back porch timings.
-  * (Optional) Self-checking test bench for automation.
+```text id="3d0g6o"
+├── vga_ctrl.v      // VGA timing controller
+├── rgb_gen.v       // RGB color generator
+├── vga_top.v       // Top-level integration module
+└── vga_TB.v        // Testbench for simulation
+```
 
 ---
 
-## 🚀 How to Run
+## Module Description
 
-1. **Simulation**
+### `vga_ctrl.v`
 
-   * Compile `vga_ctrl`, `rgb_block`, and `vga_top`.
-   * Run the provided test bench to validate timing and color generation.
+Generates VGA timing signals including:
 
-2. **Hardware (FPGA Board)**
+* `h_sync`
+* `v_sync`
+* `video_on`
+* Horizontal and vertical counters
 
-   * Connect VGA output pins (`hsync`, `vsync`, RGB).
-   * Load bitstream.
-   * Use switches (`SW[2:0]`) to change display colors.
+Supports standard VGA timing:
 
+* Resolution: 640×480
+* Refresh Rate: 60 Hz
+* Pixel Clock: 25 MHz
+
+---
+
+### `rgb_gen.v`
+
+Generates RGB outputs based on switch inputs:
+
+* Red
+* Green
+* Blue
+* Yellow
+* Cyan
+* Magenta
+* White
+* Black
+
+RGB outputs are enabled only during the active display region.
+
+---
+
+### `vga_top.v`
+
+Top-level integration module connecting:
+
+* VGA timing controller
+* RGB generator
+* VGA output signals
+
+Outputs:
+
+* `h_sync`
+* `v_sync`
+* `red`
+* `green`
+* `blue`
+
+---
+
+### `vga_TB.v`
+
+Simulation testbench used to verify:
+
+* VGA synchronization timing
+* Active video region behavior
+* RGB color generation
+* Frame timing operation
+
+---
+
+## VGA Timing Specifications
+
+| Parameter        | Value      |
+| ---------------- | ---------- |
+| Resolution       | 640 × 480  |
+| Refresh Rate     | 60 Hz      |
+| Pixel Clock      | 25 MHz     |
+| Horizontal Total | 800 pixels |
+| Vertical Total   | 525 lines  |
+
+---
+
+## Tools Used
+
+* Verilog HDL
+* ModelSim
+* Quartus Prime
+* FPGA Development Board
+
+---
+
+## Simulation
+
+Compile and run all modules with the provided testbench to verify:
+
+* HSYNC and VSYNC timing
+* RGB output behavior
+* Visible and blanking region operation
+
+---
+
+## FPGA Implementation
+
+The design can be synthesized and programmed on FPGA boards with VGA support. Switch inputs can be used to change display colors in real time.
+
+---
+
+## Applications
+
+* VGA display systems
+* FPGA graphics projects
+* Digital design education
+* Video timing generation
+* Embedded display interfaces
+
+---
+
+## Future Improvements
+
+* Higher VGA resolutions
+* Expanded RGB color depth
+* Pattern and image generation
+* Text rendering support
+* Multiple refresh rate support
+
+---
+
+## Author
+
+Mai Fakhry
